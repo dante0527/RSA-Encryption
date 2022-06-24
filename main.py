@@ -99,9 +99,10 @@ def prepare_rsa(p, q):
     
     return N, e, d
 
+
 # Select prime numbers
 N, e, d = prepare_rsa(3, 11)
 
 # Encrypt or decrypt message
 #encrypt_message()
-decrypt_message()
+#decrypt_message()
