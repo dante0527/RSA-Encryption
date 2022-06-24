@@ -1,15 +1,10 @@
 from alphabet import *
 
-# Prime numbers
-p = 3
-q = 11
-
-# Public keys
-N = p * q
-e = 3
-
-# Private keys
-d = 7
+def gcd(a, b):
+    if (b == 0):
+        return abs(a)
+    else:
+        return gcd(b, a % b)
 
 
 def encrypt(char):
@@ -83,5 +78,30 @@ def decrypt_message():
 
     return plaintext
 
-encrypt_message()
-#decrypt_message()
+def prepare_rsa(p, q):
+    # Public keys
+    N = p * q
+    N0 = (p-1)*(q-1)
+
+    # Find e: first integer relatively prime to N0
+    for i in range(2, N0):
+        if gcd(i, N0) == 1:
+            e = i
+            break
+        else:
+            continue
+
+    # Find d: inverse of e % N0
+    for i in range(0, N0):
+        if ((e * i) % N0) == 1:
+            d = i
+            break
+    
+    return N, e, d
+
+# Select prime numbers
+N, e, d = prepare_rsa(3, 11)
+
+# Encrypt or decrypt message
+#encrypt_message()
+decrypt_message()
