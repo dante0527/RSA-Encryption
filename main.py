@@ -38,13 +38,16 @@ def gcd(a, b):
         return gcd(b, a % b)
 
 
-# Generate public encryption keys, e, and d
+# Generate encryption keys, e, and d
 def prepare_rsa(p, q):
 
-    # Public keys
+    # Part of public key
     N = p * q
+
+    # Part of private key
     N0 = (p-1)*(q-1)
 
+    # Part of public key
     # Find e: first integer relatively prime to N0
     for i in range(2, N0):
         if gcd(i, N0) == 1:
@@ -52,8 +55,9 @@ def prepare_rsa(p, q):
             break
         else:
             continue
-
-    # Find d: inverse of e % N0
+    
+    # Part of private key
+    # Find d: multiplicative inverse of e % N0
     for i in range(0, N0):
         if ((e * i) % N0) == 1:
             d = i
