@@ -30,7 +30,7 @@ alphabet_e = {'a': '01',
 # Decryption Alphabet
 alphabet_d = {n: c for c, n in alphabet_e.items()}
 
-# Find GCD of two numbers
+# Euclidian Algorithm: Find GCD of two numbers
 def gcd(a, b):
     if (b == 0):
         return abs(a)
