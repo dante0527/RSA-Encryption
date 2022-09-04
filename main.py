@@ -1,3 +1,4 @@
+# Encryption alphabet
 alphabet_e = {'a': '01',
             'b': '02',
             'c': '03',
@@ -26,8 +27,10 @@ alphabet_e = {'a': '01',
             'z': '26',
             ' ': '32'}
 
-alphabet_d = {c: n for n, c in alphabet_e.items()}
+# Decryption Alphabet
+alphabet_d = {n: c for c, n in alphabet_e.items()}
 
+# Find GCD of two numbers
 def gcd(a, b):
     if (b == 0):
         return abs(a)
@@ -35,19 +38,48 @@ def gcd(a, b):
         return gcd(b, a % b)
 
 
+# Generate public encryption keys, e, and d
+def prepare_rsa(p, q):
+
+    # Public keys
+    N = p * q
+    N0 = (p-1)*(q-1)
+
+    # Find e: first integer relatively prime to N0
+    for i in range(2, N0):
+        if gcd(i, N0) == 1:
+            e = i
+            break
+        else:
+            continue
+
+    # Find d: inverse of e % N0
+    for i in range(0, N0):
+        if ((e * i) % N0) == 1:
+            d = i
+            break
+    
+    return N, e, d
+
+
+# Encrypt character
 def encrypt(char):
     return str((int(char) ** e) % N).zfill(2)
 
 
+# Decrypt character
 def decrypt(char):
     return str((int(char) ** d) % N).zfill(2)
 
 
+# Split word into characters
 def split(word):
     return [char for char in word]
 
 
+# Encrypt message from letters to numbers
 def encrypt_message():
+
     # Messages
     plaintext = []
     encrypted = []
@@ -59,6 +91,7 @@ def encrypt_message():
 
     # Encrypt message
     for word in plaintext:
+
         # Split word into characters
         chars = split(word)
 
@@ -72,14 +105,16 @@ def encrypt_message():
     # Join encrypted words with space characters
     encrypted = " 32 ".join(encrypted)
 
-    # Write encrypted message
+    # Write encrypted message to file
     with open("encrypted.txt", "w") as fout:
         fout.write(encrypted)
     
     return encrypted
 
 
+# Decrypt message from numbers to letters
 def decrypt_message():
+
     # Messages
     encrypted = []
     decrypted = []
@@ -105,27 +140,6 @@ def decrypt_message():
         fout.write(plaintext)
 
     return plaintext
-
-def prepare_rsa(p, q):
-    # Public keys
-    N = p * q
-    N0 = (p-1)*(q-1)
-
-    # Find e: first integer relatively prime to N0
-    for i in range(2, N0):
-        if gcd(i, N0) == 1:
-            e = i
-            break
-        else:
-            continue
-
-    # Find d: inverse of e % N0
-    for i in range(0, N0):
-        if ((e * i) % N0) == 1:
-            d = i
-            break
-    
-    return N, e, d
 
 
 # Select prime numbers
