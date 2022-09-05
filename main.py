@@ -27,7 +27,7 @@ alphabet_e = {'a': '01',
             'z': '26',
             ' ': '32'}
 
-# Decryption Alphabet
+# Decryption alphabet
 alphabet_d = {n: c for c, n in alphabet_e.items()}
 
 # Euclidian Algorithm: Find GCD of two numbers
@@ -45,7 +45,7 @@ def prepare_rsa(p, q):
     N = p * q
 
     # Part of private key
-    N0 = (p-1)*(q-1)
+    N0 = (p-1) * (q-1)
 
     # Part of public key
     # Find e: first integer relatively prime to N0
@@ -53,8 +53,6 @@ def prepare_rsa(p, q):
         if gcd(i, N0) == 1:
             e = i
             break
-        else:
-            continue
     
     # Part of private key
     # Find d: multiplicative inverse of e % N0
@@ -62,7 +60,7 @@ def prepare_rsa(p, q):
         if ((e * i) % N0) == 1:
             d = i
             break
-    
+
     return N, e, d
 
 
@@ -81,19 +79,14 @@ def split(word):
     return [char for char in word]
 
 
-# Encrypt message from letters to numbers
-def encrypt_message():
+# Encrypt message from input file
+def encrypt_message(message):
 
     # Messages
-    plaintext = []
+    plaintext = message.lower().split()
     encrypted = []
 
-    # Read plaintext message
-    with open("input.txt", "r") as fin:
-        message = fin.read()
-        plaintext = message.lower().split()
-
-    # Encrypt message
+    # Exncrypt message
     for word in plaintext:
 
         # Split word into characters
@@ -107,48 +100,118 @@ def encrypt_message():
         encrypted.append(encrypted_word)
 
     # Join encrypted words with space characters
-    encrypted = " 32 ".join(encrypted)
+    encrypted  = " 32 ".join(encrypted)
 
-    # Write encrypted message to file
-    with open("encrypted.txt", "w") as fout:
-        fout.write(encrypted)
-    
     return encrypted
 
 
 # Decrypt message from numbers to letters
-def decrypt_message():
+def decrypt_message(message):
 
     # Messages
-    encrypted = []
+    encrypted = message.split()
     decrypted = []
     plaintext = []
 
-    # Read encrypted message
-    with open("input.txt", "r") as fin:
-        message = fin.read()
-        encrypted = message.split()
-
-    # Decrypt message
+    # Decrypt
     for char in encrypted:
         decrypted.append(decrypt(char))
 
     # Decipher message
     for char in decrypted:
         plaintext.append(alphabet_d[char])
-
+    
     plaintext = "".join(plaintext)
-
-    # Write encrypted message
-    with open("decrypted.txt", "w") as fout:
-        fout.write(plaintext)
 
     return plaintext
 
+# Option Menu
+def options():
+    print("Options:\n\
+        1 - Encrypt message from file\n\
+        2 - Decrypt message from file\n\
+        3 - Encrypt message in terminal\n\
+        4 - Decrypt message in terminal\n")
 
-# Select prime numbers
-N, e, d = prepare_rsa(3, 11)
+# Get prime numbers
+p = int(input("Enter the first prime number: "))
+q = int(input("Enter the second prime number: "))
 
-# Encrypt or decrypt message
-#encrypt_message()
-#decrypt_message()
+print()
+
+# Generate values for encryption / decryption
+N, e, d = prepare_rsa(p, q)
+
+# User interface
+while True:
+
+    # Show options
+    options()
+
+    # Get selection from user
+    selection = input()
+
+    # Encrypt message from file
+    if selection == "1":
+
+        # Read plaintext input
+        with open("input.txt", "r") as fin:
+            message = fin.read()
+
+        # Write encrypted message
+        with open("encrypted.txt", "w") as fout:
+            fout.write(encrypt_message(message))
+        
+        # Success message
+        print("File encrypted!\n")
+
+    # Decrypt message from file
+    elif selection == "2":
+
+        # Read plaintext input
+        with open("input.txt", "r") as fin:
+            message = fin.read()
+
+        # Write encrypted message
+        with open("decrypted.txt", "w") as fout:
+            fout.write(decrypt_message(message))
+        
+        # Success message
+        print("File decrypted!\n")
+
+    # Encrypt message in terminal
+    elif selection == "3":
+        
+        # Get message from user
+        message = input("Enter message to encrypt:\n")
+
+        # Print encrypted message
+        print(f"\nEncrypted message:\n{encrypt_message(message)}\n")
+
+    # Decrypt message in terminal
+    elif selection == "4":
+
+        # Get encrypted message from user
+        message = input("Enter message to decrypt:\n")
+
+        # Print decrypted message
+        print(f"\nDecrypted message:\n{decrypt_message(message)}\n")
+
+    # Input validation
+    else:
+        print("Invalid choice\n")
+
+    # Option to exit
+    exit = input("Make another selection?\n\
+        'Y' to continue\n\
+        any other key to exit\n").upper()
+
+    print()
+
+    # Make another selection
+    if exit == "Y":
+        continue
+    
+    # Exit
+    else:
+        break
