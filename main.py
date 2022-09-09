@@ -100,7 +100,7 @@ def encrypt_message(message):
         encrypted.append(encrypted_word)
 
     # Join encrypted words with space characters
-    encrypted  = " 32 ".join(encrypted)
+    encrypted  = f" {encrypt(alphabet_e[' '])} ".join(encrypted)
 
     return encrypted
 
