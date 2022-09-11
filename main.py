@@ -39,38 +39,38 @@ def gcd(a, b):
 
 
 # Generate encryption keys, e, and d
-def prepare_rsa(p, q):
+def generate_keys(p, q):
 
     # Part of public key
-    N = p * q
+    n = p * q
 
     # Part of private key
-    N0 = (p-1) * (q-1)
+    n0 = (p-1) * (q-1)
 
     # Part of public key
     # Find e: first integer relatively prime to N0
-    for i in range(2, N0):
-        if gcd(i, N0) == 1:
+    for i in range(2, n0):
+        if gcd(i, n0) == 1:
             e = i
             break
     
     # Part of private key
     # Find d: multiplicative inverse of e % N0
-    for i in range(0, N0):
-        if ((e * i) % N0) == 1:
+    for i in range(0, n0):
+        if ((e * i) % n0) == 1:
             d = i
             break
 
-    return N, e, d
+    return n, e, d
 
 
 # Encrypt character
-def encrypt(char):
+def encrypt(char, N, e):
     return str((int(char) ** e) % N).zfill(2)
 
 
 # Decrypt character
-def decrypt(char):
+def decrypt(char, N, d):
     return str((int(char) ** d) % N).zfill(2)
 
 
@@ -80,7 +80,7 @@ def split(word):
 
 
 # Encrypt message
-def encrypt_message(msg):
+def encrypt_message(msg, N, e):
 
     # Messages
     plaintext = msg.lower().split()
@@ -93,20 +93,20 @@ def encrypt_message(msg):
         chars = split(word)
 
         # Create list of encrypted characters
-        encrypted_chars = [encrypt(alphabet_e[char]) for char in chars]
+        encrypted_chars = [encrypt(alphabet_e[char], N, e) for char in chars]
 
         # Add encrypted word to list
         encrypted_word = " ".join(encrypted_chars)
         encrypted.append(encrypted_word)
 
     # Join encrypted words with space characters
-    encrypted  = f" {encrypt(alphabet_e[' '])} ".join(encrypted)
+    encrypted  = f" {encrypt(alphabet_e[' '], N, e)} ".join(encrypted)
 
     return encrypted
 
 
 # Decrypt message
-def decrypt_message(msg):
+def decrypt_message(msg, N, d):
 
     # Messages
     encrypted = msg.split()
@@ -115,7 +115,7 @@ def decrypt_message(msg):
 
     # Decrypt
     for char in encrypted:
-        decrypted.append(decrypt(char))
+        decrypted.append(decrypt(char, N, d))
 
     # Decipher message
     for char in decrypted:
@@ -128,19 +128,12 @@ def decrypt_message(msg):
 # Option Menu
 def options():
     print("Options:\n\
+        0 - Generate Key Pair\n\n\
         1 - Encrypt message from file\n\
         2 - Decrypt message from file\n\
         3 - Encrypt message in terminal\n\
         4 - Decrypt message in terminal\n")
 
-# Get prime numbers
-p = int(input("Enter the first prime number: "))
-q = int(input("Enter the second prime number: "))
-
-print()
-
-# Generate values for encryption / decryption
-N, e, d = prepare_rsa(p, q)
 
 # User interface
 while True:
@@ -151,8 +144,28 @@ while True:
     # Get selection from user
     selection = input()
 
+    # Generate key pair
+    if selection == "0":
+
+        # Get prime numbers
+        p = int(input("Enter the first prime number: "))
+        q = int(input("Enter the second prime number: "))
+        print()
+
+        # Generate values for encryption / decryption
+        n, e, d = generate_keys(p, q)
+
+        # Show keys
+        print(f"Public key:\nN: {n}\ne: {e}\n")
+        print(f"Private key:\nN: {n}\nd: {d}\n")
+
     # Encrypt message from file
-    if selection == "1":
+    elif selection == "1":
+
+        # Get public key
+        n = int(input("Enter public key N: "))
+        e = int(input("Enter public key e: "))
+        print()
 
         # Read plaintext input
         with open("input.txt", "r") as fin:
@@ -168,13 +181,18 @@ while True:
     # Decrypt message from file
     elif selection == "2":
 
+        # Get private key
+        n = int(input("Enter private key N: "))
+        d = int(input("Enter private key d: "))
+        print()
+
         # Read plaintext input
         with open("input.txt", "r") as fin:
             message = fin.read()
 
         # Write encrypted message
         with open("decrypted.txt", "w") as fout:
-            fout.write(decrypt_message(message))
+            fout.write(decrypt_message(message, n, d))
         
         # Success message
         print("File decrypted!\n")
@@ -182,20 +200,30 @@ while True:
     # Encrypt message in terminal
     elif selection == "3":
         
+        # Get public key
+        n = int(input("Enter public key N: "))
+        e = int(input("Enter public key e: "))
+        print()
+
         # Get message from user
         message = input("Enter message to encrypt:\n")
 
         # Print encrypted message
-        print(f"\nEncrypted message:\n{encrypt_message(message)}\n")
+        print(f"\nEncrypted message:\n{encrypt_message(message, n, e)}\n")
 
     # Decrypt message in terminal
     elif selection == "4":
+
+        # Get private key
+        n = int(input("Enter private key N: "))
+        d = int(input("Enter private key d: "))
+        print()
 
         # Get encrypted message from user
         message = input("Enter message to decrypt:\n")
 
         # Print decrypted message
-        print(f"\nDecrypted message:\n{decrypt_message(message)}\n")
+        print(f"\nDecrypted message:\n{decrypt_message(message, n, d)}\n")
 
     # Input validation
     else:
