@@ -177,7 +177,7 @@ while True:
 
         # Write encrypted message
         with open("encrypted.txt", "w") as fout:
-            fout.write(encrypt_message(message))
+            fout.write(encrypt_message(message, n, e))
         
         # Success message
         print("File encrypted!\n")
