@@ -45,19 +45,19 @@ def generate_keys(p, q):
     n = p * q
 
     # Part of private key
-    n0 = (p-1) * (q-1)
+    N0 = (p-1) * (q-1)
 
     # Part of public key
     # Find e: first integer relatively prime to N0
-    for i in range(2, n0):
-        if gcd(i, n0) == 1:
+    for i in range(2, N0):
+        if gcd(i, N0) == 1:
             e = i
             break
     
     # Part of private key
     # Find d: multiplicative inverse of e % N0
-    for i in range(0, n0):
-        if ((e * i) % n0) == 1:
+    for i in range(0, N0):
+        if ((e * i) % N0) == 1:
             d = i
             break
 
@@ -154,11 +154,11 @@ while True:
 
         try:
             # Generate values for encryption / decryption
-            n, e, d = generate_keys(p, q)
+            N, e, d = generate_keys(p, q)
             
             # Show keys
-            print(f"Public key:\nN: {n}\ne: {e}\n")
-            print(f"Private key:\nN: {n}\nd: {d}\n")
+            print(f"Public key:\nN: {N}\ne: {e}\n")
+            print(f"Private key:\nN: {N}\nd: {d}\n")
 
         except:
             print("Error: Invalid Primes\n")
@@ -167,7 +167,7 @@ while True:
     elif selection == "1":
 
         # Get public key
-        n = int(input("Enter public key N: "))
+        N = int(input("Enter public key N: "))
         e = int(input("Enter public key e: "))
         print()
 
@@ -177,7 +177,7 @@ while True:
 
         # Write encrypted message
         with open("encrypted.txt", "w") as fout:
-            fout.write(encrypt_message(message, n, e))
+            fout.write(encrypt_message(message, N, e))
         
         # Success message
         print("File encrypted!\n")
@@ -186,7 +186,7 @@ while True:
     elif selection == "2":
 
         # Get private key
-        n = int(input("Enter private key N: "))
+        N = int(input("Enter private key N: "))
         d = int(input("Enter private key d: "))
         print()
 
@@ -197,7 +197,7 @@ while True:
         # Write encrypted message
         try:
             with open("decrypted.txt", "w") as fout:
-                fout.write(decrypt_message(message, n, d))
+                fout.write(decrypt_message(message, N, d))
         except:
             print("Error: Invalid Private Key\n")
         
@@ -208,7 +208,7 @@ while True:
     elif selection == "3":
         
         # Get public key
-        n = int(input("Enter public key N: "))
+        N = int(input("Enter public key N: "))
         e = int(input("Enter public key e: "))
         print()
 
@@ -216,13 +216,13 @@ while True:
         message = input("Enter message to encrypt:\n")
 
         # Print encrypted message
-        print(f"\nEncrypted message:\n{encrypt_message(message, n, e)}\n")
+        print(f"\nEncrypted message:\n{encrypt_message(message, N, e)}\n")
 
     # Decrypt message in terminal
     elif selection == "4":
 
         # Get private key
-        n = int(input("Enter private key N: "))
+        N = int(input("Enter private key N: "))
         d = int(input("Enter private key d: "))
         print()
 
@@ -231,7 +231,7 @@ while True:
 
         # Print decrypted message
         try:
-            print(f"\nDecrypted message:\n{decrypt_message(message, n, d)}\n")
+            print(f"\nDecrypted message:\n{decrypt_message(message, N, d)}\n")
         except:
             print("Error: Invalid Private Key\n")
 
