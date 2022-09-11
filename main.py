@@ -152,12 +152,16 @@ while True:
         q = int(input("Enter the second prime number: "))
         print()
 
-        # Generate values for encryption / decryption
-        n, e, d = generate_keys(p, q)
+        try:
+            # Generate values for encryption / decryption
+            n, e, d = generate_keys(p, q)
+            
+            # Show keys
+            print(f"Public key:\nN: {n}\ne: {e}\n")
+            print(f"Private key:\nN: {n}\nd: {d}\n")
 
-        # Show keys
-        print(f"Public key:\nN: {n}\ne: {e}\n")
-        print(f"Private key:\nN: {n}\nd: {d}\n")
+        except:
+            print("Error: Invalid Primes\n")
 
     # Encrypt message from file
     elif selection == "1":
@@ -191,8 +195,11 @@ while True:
             message = fin.read()
 
         # Write encrypted message
-        with open("decrypted.txt", "w") as fout:
-            fout.write(decrypt_message(message, n, d))
+        try:
+            with open("decrypted.txt", "w") as fout:
+                fout.write(decrypt_message(message, n, d))
+        except:
+            print("Error: Invalid Private Key\n")
         
         # Success message
         print("File decrypted!\n")
@@ -223,7 +230,10 @@ while True:
         message = input("Enter message to decrypt:\n")
 
         # Print decrypted message
-        print(f"\nDecrypted message:\n{decrypt_message(message, n, d)}\n")
+        try:
+            print(f"\nDecrypted message:\n{decrypt_message(message, n, d)}\n")
+        except:
+            print("Error: Invalid Private Key\n")
 
     # Input validation
     else:
