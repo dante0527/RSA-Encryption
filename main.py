@@ -79,11 +79,11 @@ def split(word):
     return [char for char in word]
 
 
-# Encrypt message from input file
-def encrypt_message(message):
+# Encrypt message
+def encrypt_message(msg):
 
     # Messages
-    plaintext = message.lower().split()
+    plaintext = msg.lower().split()
     encrypted = []
 
     # Exncrypt message
@@ -105,11 +105,11 @@ def encrypt_message(message):
     return encrypted
 
 
-# Decrypt message from numbers to letters
-def decrypt_message(message):
+# Decrypt message
+def decrypt_message(msg):
 
     # Messages
-    encrypted = message.split()
+    encrypted = msg.split()
     decrypted = []
     plaintext = []
 
