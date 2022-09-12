@@ -1,6 +1,11 @@
 # RSA-Encryption
-RSA encryption/decryption script
+A CLI RSA encryption/decryption program
 
-Select two prime numbers to generate the RSA keys
+*Options*
+- Generate RSA Key Pair
+- Encrypt message from file
+- Decrypt message from file
+- Encrypt message in terminal
+- Decrypt message in terminal
 
-Use functions encrypt_message() and decrypt_message() by passing text to input.txt
+Key pairs come in two parts: product of primes (N), and exponent (e/d)
