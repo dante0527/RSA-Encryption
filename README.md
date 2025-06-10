@@ -1,6 +1,8 @@
 # RSA-Encryption
 A CLI RSA encryption/decryption program
 
+Tutorial video [here](https://youtu.be/MMQphbVOTNU?si=-HuyPoS41CajQlPc)
+
 *Options*
 - Generate RSA Key Pair
 - Encrypt message from file
